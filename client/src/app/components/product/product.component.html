@@ -1,0 +1,7 @@
+<!-- <img width="200" [src]="product.image"> -->
+<app-img  [img]="product.image"></app-img>
+<h2>{{product.price | currency:'MXN'}}</h2>
+<p>{{product.name}}</p>
+<p appHighlight>{{product.description}}</p>
+<button (click)="onShowDetail()">Ver detalle</button>
+<button (click)="onAddToCart()">Add cart</button>

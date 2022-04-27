@@ -43,5 +43,17 @@ router.post('/change-password',
     }
   });
 
+  router.get('/ver-perfil',
+  // passport.authenticate('jwt',{session:false}),
+  async (req, res, next) => {
+  try {
+    const token = req.headers.authorization.split(" ")[1];
+    const user=await service.getProfile(token);
+    res.json(user);
+
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = router;

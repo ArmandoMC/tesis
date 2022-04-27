@@ -3,9 +3,11 @@ const passport = require('passport');
 // const {config}=require('../config/config');
 // const validatorHandler = require('./../middlewares/validator.handler');
 const OrderService = require('./../services/order.service');
-
+const AuthService=require('./../services/auth.service');
 const router = express.Router();
 const service=new OrderService();
+const authService=new AuthService();
+
 
 router.get('/my-orders',
   passport.authenticate('jwt',{session:false}),
