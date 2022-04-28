@@ -24,7 +24,14 @@ class ProductsService {
   }
 
   async find(query) {
-    const sql = 'SELECT * FROM products';
+    const {limit,offset}=query;
+    let sql;
+    if(limit && offset){
+       sql = `SELECT * FROM products LIMIT ${limit} OFFSET ${offset}`;
+
+    }else{
+      sql  = 'SELECT * FROM products';
+    }
     const products = await this.pool.query(sql);
     return products.rows;
   }

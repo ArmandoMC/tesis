@@ -10,11 +10,10 @@
       ],
       "parserOptions": {
         "project": [
-          "../client/tsconfig.json"
-
+          "tsconfig.json"
         ],
         "env":{ "es6": true } ,
-        "tsconfigRootDir": "../client",
+        // "tsconfigRootDir": "../client",
 
         "createDefaultProgram": true
 

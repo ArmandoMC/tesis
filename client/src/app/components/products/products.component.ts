@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { CreateProductDTO, Product } from 'src/app/models/product.model';
+import{switchMap} from 'rxjs/operators';
+import{zip} from 'rxjs';
+
+import { CreateProductDTO, Product, UpdateProductDTO } from 'src/app/models/product.model';
 import { StoreService } from '../../services/store.service';
 import { ProductsService } from '../../services/products.service';
 
@@ -25,6 +28,10 @@ export class ProductsComponent implements OnInit {
     categoryId:0
   }
 
+  limit=5;
+  offset=0;
+  statusDetail:'loading' | 'success' | 'error' | 'init'='init';
+
   constructor(
     private storeService: StoreService,
     private productsService: ProductsService
@@ -34,10 +41,10 @@ export class ProductsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.productsService.getAllProducts()
+    this.productsService.getAllProducts(this.limit,this.offset)
       .subscribe(data => {
         this.products = data;
-      });
+      },err=>{'hubo erro de parametros'});
   }
 
   onAddToShoppingCart(product: Product) {
@@ -49,13 +56,36 @@ export class ProductsComponent implements OnInit {
     this.showProductDetail = !this.showProductDetail;
   }
   onShowDetail(id:string){
+    // this.statusDetail='loading';
+    // this.toggleProductDetail();
+
     this.productsService.getProduct(id)
     .subscribe(data=>{
-      console.log('product:', data);
       this.toggleProductDetail();
       this.productChosen=data;
+      this.statusDetail='success';
+    },errorMsg=>{
+      window.alert(errorMsg);
+      this.statusDetail='error';
     })
   }
+
+  // readAndUpdate(id:string){
+  //   this.productsService.getProduct(id)
+  //   .pipe(
+  //     switchMap((product)=>this.productsService.update(product.id,{name:'sssjjs'})),
+  //   )
+  //   .subscribe(data=>{console.log(data);})
+
+  //   zip(
+  //     this.productsService.getProduct(id),
+  //     this.productsService.update(id,{name:'sssjjs'})
+  //   )
+  //   .subscribe(response=>{
+  //     const read=response[0];
+  //     const update=response[1];
+  //   })
+  // }
 
   createNewProduct(){
     const product:CreateProductDTO={
@@ -71,5 +101,40 @@ export class ProductsComponent implements OnInit {
       console.log('created', data);
       this.products.unshift(data);
     })
+  }
+
+  updateProduct(){
+    const changes:UpdateProductDTO={
+      name:'celular xaomi',
+      image:'http://placeimg.com/640/480',
+      description:'nada',
+      price:3000,
+      categoryId:3
+
+    }
+    const id=this.productChosen.id;
+    this.productsService.update(id,changes)
+    .subscribe(data=>{
+      const productIndex=this.products.findIndex(item=>item.id===this.productChosen.id);
+      this.products[productIndex]=data;
+        })
+  }
+
+  deleteProduct(){
+    const id=this.productChosen.id;
+    this.productsService.detele(id)
+    .subscribe(()=>{
+      const productIndex=this.products.findIndex(item=>item.id===this.productChosen.id);
+      this.products.splice(productIndex,1);
+      this.showProductDetail=false;
+    })
+  }
+
+  loadMore(){
+    this.productsService.getAllProducts(this.limit,this.offset)
+    .subscribe(data => {
+      this.products=this.products.concat(data);
+      this.offset+=this.limit;
+    });
   }
 }

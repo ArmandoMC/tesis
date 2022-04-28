@@ -11,6 +11,9 @@ export interface Product{
   description:string;
   price:number;
   categoryId:number;
+  taxes?:number;
 }
 
 export interface CreateProductDTO extends Omit<Product,'id'>{}
+
+export interface UpdateProductDTO extends Partial< CreateProductDTO>{}
