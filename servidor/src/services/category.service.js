@@ -5,14 +5,14 @@ const pool = require('../libs/postgres.pool');
 
 class CategoryService {
 
-  constructor(){
+  constructor() {
     this.pool = pool;
-    this.pool.on('error',(err)=>console.error(err));
+    this.pool.on('error', (err) => console.error(err));
 
   }
   async create(data) {
 
-    const { name,image } = data;
+    const { name, image } = data;
     const query = {
       text: `INSERT INTO categories(name,image) VALUES($1,$2) RETURNING *`,
       values: [name, image]
@@ -35,10 +35,32 @@ class CategoryService {
       values: [id]
     };
     const category = await this.pool.query(query);
-    if (category.rows.length===0) {
+    if (category.rows.length === 0) {
       throw boom.notFound('category not found');
     }
     return category.rows[0];
+  }
+  async findByCategory(id, query) {
+
+    const { limit, offset } = query;
+    let statement;
+    if (limit && offset) {
+      statement ={
+        text: `SELECT * FROM products WHERE category_id=$1 LIMIT ${limit} OFFSET ${offset}`,
+        values: [id]
+      }
+    }else{
+      statement ={
+        text: `SELECT * FROM products WHERE category_id=$1`,
+        values: [id]
+      }
+    }
+    
+    const products = await this.pool.query(statement);
+    if (products.rows.length === 0) {
+      throw boom.notFound('products not found for it category');
+    }
+    return products.rows;
   }
 
   async update(id, changes) {
@@ -46,7 +68,7 @@ class CategoryService {
     const { name, image } = changes;
     const query = {
       text: `UPDATE categories SET name=$1, image=$2 WHERE id=$3 RETURNING *`,
-      values: [name, image,id]
+      values: [name, image, id]
     };
     const rta = await this.pool.query(query);
     return rta.rows[0];

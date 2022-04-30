@@ -3,6 +3,9 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { StoreService } from '../../services/store.service';
+import { CategoriesService } from '../../services/categories.service';
+import { Category } from 'src/app/models/category';
+
 
 @Component({
   selector: 'app-header',
@@ -16,10 +19,12 @@ export class HeaderComponent implements OnInit,OnDestroy {
 
   subscription: Subscription;
   counter=0;
+  categories:Category[]=[];
 
   constructor(
     private auhtService: AuthService,
     private storeService: StoreService,
+    private categoriesService:CategoriesService,
     private router: Router
   ) {  }
 
@@ -42,7 +47,9 @@ export class HeaderComponent implements OnInit,OnDestroy {
       products=>{
           this.counter=products.length;
       }
-    )
+    );
+
+    this.getAllCategories();
   }
 
   ngOnDestroy():void{
@@ -53,6 +60,13 @@ export class HeaderComponent implements OnInit,OnDestroy {
     this.auhtService.logout();
     this.isLoggedIn=false;
     this.router.navigate(['']);
+  }
+
+  getAllCategories(){
+    this.categoriesService.getAll()
+    .subscribe(data=>{
+      this.categories=data;
+    })
   }
 
 }

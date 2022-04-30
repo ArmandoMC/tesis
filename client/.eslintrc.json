@@ -12,7 +12,6 @@
         "project": [
           "tsconfig.json"
         ],
-        "env":{ "es6": true } ,
         // "tsconfigRootDir": "../client",
 
         "createDefaultProgram": true

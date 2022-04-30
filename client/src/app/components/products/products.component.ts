@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component,Input,Output ,EventEmitter} from '@angular/core';
 import{switchMap} from 'rxjs/operators';
 import{zip} from 'rxjs';
 
@@ -11,11 +11,12 @@ import { ProductsService } from '../../services/products.service';
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css']
 })
-export class ProductsComponent implements OnInit {
+export class ProductsComponent  {
 
   myShoppingCart: Product[] = [];
   total = 0;
-  products: Product[] = []
+  @Input()products: Product[] = [];
+  @Output() loadMore=new EventEmitter<Product[]>();
   today = new Date(2021, 1, 21);
   date = new Date(2021, 1, 21);
   showProductDetail = false;
@@ -28,8 +29,8 @@ export class ProductsComponent implements OnInit {
     categoryId:0
   }
 
-  limit=5;
-  offset=0;
+  // limit=5;
+  // offset=0;
   statusDetail:'loading' | 'success' | 'error' | 'init'='init';
 
   constructor(
@@ -40,12 +41,14 @@ export class ProductsComponent implements OnInit {
     this.myShoppingCart = this.storeService.getShoppingCart();
   }
 
-  ngOnInit(): void {
-    this.productsService.getAllProducts(this.limit,this.offset)
-      .subscribe(data => {
-        this.products = data;
-      },err=>{'hubo erro de parametros'});
-  }
+  // ngOnInit(): void {
+  //   this.productsService.getAllProducts(this.limit,this.offset)
+  //     .subscribe(data => {
+  //       this.products = data;
+  //       this.offset+=this.limit;
+
+  //     },err=>{'hubo erro de parametros'});
+  // }
 
   onAddToShoppingCart(product: Product) {
     this.storeService.addProduct(product);
@@ -130,11 +133,7 @@ export class ProductsComponent implements OnInit {
     })
   }
 
-  loadMore(){
-    this.productsService.getAllProducts(this.limit,this.offset)
-    .subscribe(data => {
-      this.products=this.products.concat(data);
-      this.offset+=this.limit;
-    });
-  }
+  onLoadMore(){
+      this.loadMore.emit();
+    }
 }

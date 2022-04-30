@@ -3,7 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { RouterModule } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
-import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { FormsModule } from '@angular/forms';
@@ -21,6 +20,13 @@ import { ReversePipe } from './pipes/reverse.pipe';
 import { TimeAgoPipe } from './pipes/time-ago.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
 import {SwiperModule} from 'swiper/angular';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { CategoryComponent } from './pages/category/category.component';
+import { MyCartComponent } from './pages/my-cart/my-cart.component';
+import { RecoveryComponent } from './pages/recovery/recovery.component';
+import { ProfileComponent } from './pages/profile/profile.component';
+import { HomeComponent } from './pages/home/home.component';
+
 
 @NgModule({
   declarations: [
@@ -34,7 +40,12 @@ import {SwiperModule} from 'swiper/angular';
     ProductsComponent,
     ReversePipe,
     TimeAgoPipe,
-    HighlightDirective
+    HighlightDirective,
+    NotFoundComponent,
+    CategoryComponent,
+    MyCartComponent,
+    RecoveryComponent,
+    ProfileComponent
   ],
   imports: [
     AppRoutingModule,

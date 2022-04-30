@@ -11,18 +11,26 @@ import{environment} from '../../environments/environment';
 })
 export class ProductsService {
 
-  private API_URL=`${environment.API_URL}/api/products`;
+  private API_URL='http://localhost:3000/api';
   constructor(
     private http:HttpClient
   ) { }
 
-  getAllProducts(limit?:number, offset?:number){
+  getByCategory(categoryId:string,limit?:number, offset?:number){
     let params=new HttpParams();
-    if(limit!==undefined && offset!==undefined){
+    if(limit && offset!=null){
       params=params.set('limit',limit);
       params=params.set('offset',offset);
     }
-    return this.http.get<Product[]>(`${this.API_URL}`,{params})
+    return this.http.get<Product[]>(`${this.API_URL}/categories/${categoryId}/products`,{params});
+  }
+  getAllProducts(limit?:number, offset?:number){
+    let params=new HttpParams();
+    if(limit && offset!=null){
+      params=params.set('limit',limit);
+      params=params.set('offset',offset);
+    }
+    return this.http.get<Product[]>(`${this.API_URL}/products`,{params})
     .pipe(
       map(products=>products.map(item=>{
         return{
@@ -34,7 +42,7 @@ export class ProductsService {
 
   }
   getProduct(id:string){
-    return this.http.get<Product>(`${this.API_URL}/${id}`)
+    return this.http.get<Product>(`${this.API_URL}/products/${id}`)
     .pipe(
       catchError((error:HttpErrorResponse)=>{
         if(error.status===HttpStatusCode.Conflict){
@@ -64,20 +72,20 @@ export class ProductsService {
   // }
 
   getProductsbyPage(limit:number, offset:number){
-    return this.http.get<Product[]>(`${this.API_URL}`,{
+    return this.http.get<Product[]>(`${this.API_URL}/products`,{
       params:{limit,offset}
     });
 
   }
 
   create(dto:CreateProductDTO){
-    return this.http.post<Product>(`${this.API_URL}`,dto);
+    return this.http.post<Product>(`${this.API_URL}/products`,dto);
   }
   update(id:string,dto:UpdateProductDTO){
-    return this.http.put<Product>(`${this.API_URL}/${id}`,dto);
+    return this.http.put<Product>(`${this.API_URL}/products/${id}`,dto);
   }
   detele(id:string){
-    return this.http.delete<number>(`${this.API_URL}/${id}`);
+    return this.http.delete<number>(`${this.API_URL}/products/${id}`);
   }
 
 

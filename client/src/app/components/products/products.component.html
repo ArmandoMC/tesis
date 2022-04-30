@@ -21,7 +21,7 @@
     <app-product class="col-lg-3 col-md-4 col-sm-6" [product]="p" *ngFor="let p of products"
       (addedProduct)="onAddToShoppingCart($event)" (showProduct)="onShowDetail($event)">
     </app-product>
-    <button type="button" (click)="loadMore()" class="btn btn-secondary btn-lg btn-block">Ver mas</button>
+    <button type="button" (click)="onLoadMore()" class="btn btn-secondary btn-lg btn-block">Ver mas</button>
   </div>
 </div>
 <div class="product-detail" [ngClass]="{'active':showProductDetail}">
