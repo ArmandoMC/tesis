@@ -101,7 +101,7 @@ export class ProductsComponent  {
     }
     this.productsService.create(product)
     .subscribe(data=>{
-      console.log('created', data);
+      // console.log('created', data);
       this.products.unshift(data);
     })
   }

@@ -26,7 +26,9 @@ export class HeaderComponent implements OnInit,OnDestroy {
     private storeService: StoreService,
     private categoriesService:CategoriesService,
     private router: Router
-  ) {  }
+  ) {
+
+   }
 
   ngOnInit(): void {
 
@@ -35,9 +37,6 @@ export class HeaderComponent implements OnInit,OnDestroy {
         // console.log(currentUser.user.email)
           this.isLoggedIn = data.user.isLoggedIn;
           this.loggedInUser = data.user.email;
-
-
-          // this.loggedInUser = '';
 
       },err=>{'error al subscribirse'}
 
@@ -65,7 +64,9 @@ export class HeaderComponent implements OnInit,OnDestroy {
   getAllCategories(){
     this.categoriesService.getAll()
     .subscribe(data=>{
-      this.categories=data;
+        this.categories=data;
+
+        
     })
   }
 

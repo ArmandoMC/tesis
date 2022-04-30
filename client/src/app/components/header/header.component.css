@@ -28,3 +28,8 @@ ul{
   color: #FFF;
 }
 
+.active{
+  border:1px solid #ACD9B2 !important;
+  color:#ACD9B2;
+  border-radius: 5px;
+}

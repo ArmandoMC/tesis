@@ -11,9 +11,11 @@ import { switchMap } from 'rxjs/operators';
 export class CategoryComponent implements OnInit {
 
   categoryId: string | null = null;
-  limit = 5;
+  limit = 3;
   offset = 0;
-  products: Product[] = []
+  products: Product[] = [];
+    pro: Product[] = [];
+
   constructor(
     private route: ActivatedRoute,
     private productsService: ProductsService
@@ -28,11 +30,12 @@ export class CategoryComponent implements OnInit {
             return this.productsService.getByCategory(this.categoryId, this.limit, this.offset);
           }
           return [];
-        })
+        }),
       )
       .subscribe(data => {
         this.products = data;
         this.offset+=this.limit;
+
       })
   }
 

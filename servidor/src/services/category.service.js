@@ -44,7 +44,7 @@ class CategoryService {
 
     const { limit, offset } = query;
     let statement;
-    if (limit && offset) {
+    if (limit && offset!=null) {
       statement ={
         text: `SELECT * FROM products WHERE category_id=$1 LIMIT ${limit} OFFSET ${offset}`,
         values: [id]
@@ -58,7 +58,9 @@ class CategoryService {
     
     const products = await this.pool.query(statement);
     if (products.rows.length === 0) {
-      throw boom.notFound('products not found for it category');
+      return [];
+
+      // throw boom.notFound('products not found for it category');
     }
     return products.rows;
   }
